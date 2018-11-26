@@ -4,18 +4,17 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import * as VueGoogleMaps from "vue2-google-maps"
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
-Vue.config.productionTip = false
 Vue.use(VueGoogleMaps,{
   load: {
-    key: 'AIzaSyCOKjMXYZDNeNhC3cC6kFY6w9kgTgg3ehE',
-    libraries: 'places'
+    key: 'AIzaSyAocCFlcpTitCBLcc2Dtl8iY2mT7XrhvAk',
+    libraries: "places"
   }
 });
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
   components: { App },
   template: '<App/>'
 });
