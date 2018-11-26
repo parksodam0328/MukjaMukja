@@ -1,74 +1,59 @@
 <template>
-  <div>
-    <div>
-      <h2>먹자먹자</h2>
-      <br/>
-
-    </div>
-    <br>
-    <gmap-map
-      :center="center"
-      :zoom="15"
-      style="width:100%;  height: 600px;"
-    >
-      <gmap-marker
-        :key="index"
-        v-for="(m, index) in markers"
-        :position="m.position"
-        @click="center=m.position"
-      ></gmap-marker>
-    </gmap-map>
-  </div>
+  <div class="google-map" :id="mapName"></div>
 </template>
 
 <script>
 export default {
-  name: "GoogleMap",
+  name: 'google-map',
+  props: ['name'],
   data() {
     return {
-      // default to Montreal to keep it simple
-      // change this to whatever makes sense
-      center: { lat: 37.466418, lng: 126.932897 },
-      markers: [],
-      places: [],
-      currentPlace: null
+      mapName: this.name + "-map",
+      center: { lat: 45.508, lng: -73.587 },
+      currentMarker: null,
+      currentPlace: null,
+      bakeryMarker: []
     };
   },
 
-  mounted() {
+  mounted(){
     this.geolocate();
   },
-
   methods: {
-    // receives a place object via the autocomplete component
     setPlace(place) {
       this.currentPlace = place;
     },
-    addMarker() {
-      if (this.currentPlace) {
-        const marker = {
-          lat: this.currentPlace.geometry.location.lat(),
-          lng: this.currentPlace.geometry.location.lng()
-        };
-        this.markers.push({ position: marker });
-        this.places.push(this.currentPlace);
-        this.center = marker;
-        this.currentPlace = null;
-      }
-    },
-    geolocate: function() {
+    geolocate: function(){
       navigator.geolocation.getCurrentPosition(position => {
         this.center = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+        const element = document.getElementById(this.mapName)
+        const options = {
+          zoom: 14,
+          center: new google.maps.LatLng(this.center.lat,this.center.lng)
+        }
+        const currentPosition = new google.maps.LatLng(this.center.lat,this.center.lng);
+        const map = new google.maps.Map(element, options);
+        const marker = new google.maps.Marker({
+          position : currentPosition,
+          map: this.map
+        });
+        marker.setMap(map)
+
       });
-    }
+    },
+
   }
 };
 </script>
+
 <style scoped>
-*{
-    font-family: 'BMDOHYEON_ttf';
+.google-map {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  background: gray;
 }
 </style>
